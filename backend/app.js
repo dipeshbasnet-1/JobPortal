@@ -2,6 +2,7 @@ require('dotenv').config(); // Load .env variables
 
 const express = require('express');
 const { connectDB, sequelize } = require('./db/dbconfig'); // Import database connection and Sequelize instance
+const cors = require("cors");
 
 // Import User model
 const User = require("./model/UserModel");
@@ -17,6 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
 connectDB()// connects to database
+
+app.use(cors({
+    origin: ['http://localhost:5173/']
+}))
 
 // Sync Sequelize models
 sequelize.sync({ alter: true }).then(() => {
