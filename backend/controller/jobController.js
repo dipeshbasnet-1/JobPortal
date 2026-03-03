@@ -108,10 +108,22 @@ const deleteJobById = catchAsyncError(async (req, res) => {
     res.status(200).json({ message: "Job deleted successfully" });
 });
 
+// get my jobs
+const getMyJobs = catchAsyncError(async (req, res) => {
+    const userId = req.user.id;
+    
+    const jobs = await Job.findAll({
+        where: { userId }
+    });
+    
+    res.status(200).json({ jobs });
+});
+
 module.exports = {
     createJob,
     getAllJobs,
     getJobById,
     updateJobById,
-    deleteJobById
+    deleteJobById,
+    getMyJobs
 };

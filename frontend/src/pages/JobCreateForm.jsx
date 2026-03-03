@@ -36,27 +36,23 @@ const JobCreateForm = () => {
         jobLocation,
         jobSalary,
     };
-
-
     const response = await APIAuthenticatedClient.post(
-        "/api/job",
+        "/api/jobs",
         jobData
     );
     
     if (response.status === 201) {
         alert("Job created successfully!");
-        navigate("/job-provider-dashboard");
-    }
+        navigate("/job-provider-dashboard"); // dynamic dashboard
+        }
+        
     } catch (error) {
-        console.error("Error creating job:", error);
-        alert(
-            error.response?.data?.message ||
-            "Failed to create job. Please try again."
-        );
-    } finally {
-        setLoading(false);
-    }
-};
+            console.error("Error creating job:", error);
+            alert(error.response?.data?.message || "Failed to create job. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
 return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">

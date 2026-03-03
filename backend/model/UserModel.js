@@ -31,6 +31,11 @@ const User= sequelize.define("User",{
             type: DataTypes.STRING,
             allowNull: true
         },
+        
+        isOtpVerified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
         otpGeneratedTime: {
             type: DataTypes.STRING,
             allowNull: true

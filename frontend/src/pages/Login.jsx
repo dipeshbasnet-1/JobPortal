@@ -12,22 +12,28 @@ const Login = () => {
 
     // Redirect based on user role after login
     useEffect(() => {
-        if (authState.loading === "successw" && authState.error === null && authState.user) {
-            if (authState.user.role === "provider") {
-                navigate("/provider-dashboard");
-            } else {
-                navigate("/user-dashboard");
+        if (authState.user && authState.loading === "success") {
+            const role = authState.user.userRole;
+            
+            // Double-check the role from backend
+            if (role === "jobProvider") navigate("/job-provider-dashboard");
+            else if (role === "jobSeeker") navigate("/job-seeker-dashboard");
+            else {
+                console.error("Unknown user role:", role);
+                alert("Cannot determine your role. Contact support.");
             }
         }
     }, [authState, navigate]);
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = {
-            userEmail: email,
-            userPassword: password,
-        };
-        dispatch(loginUser(data));
+        
+        if (!email || !password) {
+            alert("Please enter both email and password");
+            return;
+        }
+        
+        dispatch(loginUser({ userEmail: email, userPassword: password }));
     };
 
     return (
@@ -77,7 +83,32 @@ const Login = () => {
                     >
                         Login
                     </button>
-
+                    
+            
+            <div className="text-center text-sm mt-4">
+                <span className="text-gray-600">
+                    Don't have an account?{" "}
+                    <span
+                    onClick={() => navigate("/register")}
+                    className="text-emerald-600 cursor-pointer hover:underline"
+                    >
+                        Register here
+                    </span>
+                </span>
+            </div>
+            
+            
+            <div className="text-center text-sm mt-2">
+                <span
+                onClick={() => navigate("/forgot-password")}
+                className="text-emerald-600 cursor-pointer hover:underline"
+                >
+                    Forgot Password?
+                </span>
+            </div>
+            
+            
+            
                     {authState.error && (
                         <p className="text-red-500 text-sm mt-2 text-center">{authState.error}</p>
                     )}

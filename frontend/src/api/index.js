@@ -1,31 +1,36 @@
 import axios from "axios";
 
+// Base URL 
+const BASE_URL = "http://localhost:4000";
+
+// Axios instance for public API requests
 const apiClient = axios.create({
-    baseURL: "http://localhost:4000/api",
+    baseURL: BASE_URL,
     headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-},
+        "Content-Type": "application/json",
+        Accept: "application/json",
+    },
 });
 
-const APIauthenticatedClient = axios.create({
-    baseURL: "http://localhost:4000/api",
+// Axios instance for authenticated requests
+const APIAuthenticatedClient = axios.create({
+    baseURL: BASE_URL,
     headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-},
+        "Content-Type": "application/json",
+        Accept: "application/json",
+    },
 });
 
-// Add token to headers automatically
-APIauthenticatedClient.interceptors.request.use(
+// Automatically attach token for authenticated requests
+APIAuthenticatedClient.interceptors.request.use(
     (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-},
-(error) => Promise.reject(error)
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+            return config;
+        },
+    (error) => Promise.reject(error)
 );
 
-export { apiClient, APIauthenticatedClient };
+export { apiClient, APIAuthenticatedClient };

@@ -37,7 +37,7 @@ const Job = sequelize.define("Job",{
     }
 }, {
     tableName: "Jobs",
-    timestamps: false
+    timestamps: true
 }
 )
 

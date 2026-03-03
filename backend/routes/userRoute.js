@@ -5,26 +5,30 @@ const router = require('express').Router();
 const { registerUser, 
     loginUser, 
     forgotPassword, 
-    checkOtp, 
-    resetPassword 
+    verifyOtp, 
+    resetPassword,
+    listUsers
 } = require("../controller/userController");
 
 // Async Error Wrapper
-const errorHandler = require("../services/catchAsyncError");
+const catchAsyncError = require("../services/catchAsyncError");
 
 // Register user
-router.route("/register").post(errorHandler(registerUser));
+router.route("/register").post(catchAsyncError(registerUser));
 
 // Login user
-router.route("/login").post(errorHandler(loginUser));
+router.route("/login").post(catchAsyncError(loginUser));
 
 // Forgot Password
-router.route("/forgot-password").post(errorHandler(forgotPassword));
+router.route("/forgot-password").post(catchAsyncError(forgotPassword));
 
-// Check OTP
-router.route("/check-otp").post(errorHandler(checkOtp));
+// Verify OTP
+router.route("/verify-otp").post(catchAsyncError(verifyOtp))
 
 // Reset Password
-router.route("/change-password").post(errorHandler(resetPassword));
+router.route("/change-password").post(catchAsyncError(resetPassword));
+
+// list users
+router.route("/list-users").get(catchAsyncError(listUsers));
 
 module.exports = router;

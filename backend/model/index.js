@@ -1,7 +1,7 @@
 const User = require("./UserModel");
 const Job = require("./JobModel");
 const Application = require("./applicationModel"); 
-
+const Transaction = require("./paymentModel");
 
 // User - Job
 User.hasMany(Job, { foreignKey: "userId" });
@@ -16,4 +16,4 @@ Job.hasMany(Application, { foreignKey: "jobId" });
 Application.belongsTo(Job, { foreignKey: "jobId" });
 
 
-module.exports = { User, Job, Application };
+module.exports = { User, Job, Application, Transaction };

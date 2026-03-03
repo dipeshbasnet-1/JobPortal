@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { APIAuthenticatedClient } from "../api";
 import { useNavigate } from "react-router-dom";
 
 const JobProviderDashboard = () => {
+    const [jobs, setJobs] = useState([]);
     const navigate = useNavigate();
-    
-    const handleCreate = () => {
-        const [jobs, setJobs] = useState([]);
-        navigate("/create-job");
+
+    const handleCreate = () => navigate("/create-job");
+
+    // Fetch provider's jobs from backend
+    const fetchJobs = async () => {
+        try {
+            const response = await APIAuthenticatedClient.get("/jobs/my-jobs");
+            setJobs(response.data.jobs || []);
+        } catch (err) {
+            console.error("Failed to fetch jobs:", err);
+        }
     };
-    
+
+    useEffect(() => { fetchJobs(); }, []);
     return (
     <div className="min-h-screen bg-gray-100 p-6">
     {/* Header */}
@@ -36,7 +46,7 @@ const JobProviderDashboard = () => {
             </p>
             
             <div className="flex justify-between items-center mt-4">
-                <span className="text-sm text-gray-700">📍 Kathmandu</span>
+                <span className="text-sm text-gray-700"> Kathmandu</span>
                 <span className="text-sm font-semibold text-emerald-600">
                     Rs. 100,000
                 </span>

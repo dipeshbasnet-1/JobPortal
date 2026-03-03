@@ -22,7 +22,7 @@ const seedAdminUser = async () => {
             userRole: "jobProvider"
         })
         
-        console.log("🎉 Admin user created successfully!");
+        console.log("Admin user created successfully!");
     } catch (error) {
         console.error("Error seeding admin:", error);
     }

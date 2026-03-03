@@ -19,11 +19,11 @@ const connectDB = async () => {
     await sequelize.authenticate();
     console.log(" Database connected successfully.");
     
-    // Load models and relationships
-    require("../model/index"); 
+    // Import all models and associations
+    require("../model"); 
 
     // Sync models safely
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ force: false, alter:false });
     console.log("All models were synchronized successfully.");
     } catch (error) {
     console.error(" Unable to connect to the database:", error);

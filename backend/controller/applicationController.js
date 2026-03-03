@@ -5,6 +5,7 @@ const catchAsyncError = require("../services/catchAsyncError");
 const jobApply = catchAsyncError(async (req, res) => {
     const { jobId } = req.params;
     const userId = req.user.id;
+    console.log(req.user.id)
     
     // Only job seekers can apply
     if (req.user.userRole === "jobProvider") {

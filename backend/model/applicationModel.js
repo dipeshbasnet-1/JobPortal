@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../db/dbconfig"); 
+
 // Define Application model
 const Application = sequelize.define("Application", {
     id: {

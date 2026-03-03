@@ -1,46 +1,74 @@
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config(); // Load .env variables
 
-const express = require('express');
-const { connectDB, sequelize } = require('./db/dbconfig'); // Import database connection and Sequelize instance
-const cors = require("cors");
+const app = express();
 
-// Import User model
-const User = require("./model/UserModel");
-const app = express ();
-
-// Import admin seeding function to create default admin
-const seedAdminUser = require("./adminSeed");
-console.log("DEBUG IMPORT:", seedAdminUser);
-seedAdminUser();
-
-// parse json data
+// Middleware to parse JSON
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
 
-connectDB()// connects to database
-
+// Enable CORS
 app.use(cors({
-    origin: ['http://localhost:5173/']
-}))
+    origin: "http://localhost:5173", // Frontend URL
+    credentials: true, // Allow cookies and authorization headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Sync Sequelize models
-sequelize.sync({ alter: true }).then(() => {
-    console.log("All models synced with database");
-});
+// Import database connection and models
+const { connectDB, sequelize } = require('./db/dbconfig');
+
+// Import models
+const User = require('./model/UserModel');
+const Job = require('./model/JobModel');
+const Application = require('./model/applicationModel');
+require('./model/paymentModel'); // Transaction model
+
+// Import admin seeding function
+const seedAdminUser = require('./adminSeed');
+
+// Initialize database, sync models, and seed admin
+const initializeApp = async () => {
+    try {
+        // Connect to DB
+        await connectDB();
+
+        // Sync all models (creates tables if they don't exist)
+        await sequelize.sync({ alter: true });
+        console.log("All models synced successfully");
+
+        // Seed admin user
+        await seedAdminUser();
+        console.log("Admin seeding completed");
+
+        // Start server on port 4000
+        const port = process.env.PORT || 4000;
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+
+    } catch (err) {
+        console.error("Failed to initialize app:", err);
+        process.exit(1);
+    }
+};
+
+// Call initialize
+initializeApp();
 
 // Routes
-// User authentication routes (register, login, OTP verification)
-const userRoute = require("./routes/userRoute");
-app.use("/api/auth", userRoute);
+const userRoutes = require("./routes/userRoute");  
+app.use("/api/auth", userRoutes);
 
-// application routes
-const applicationRoute = require("./routes/applicationRoute");
-app.use("/api/application", applicationRoute);
+const jobRoutes = require("./routes/jobRoute");
+app.use("/api/jobs", jobRoutes);
 
+const applicationRoutes = require("./routes/applicationRoute");
+app.use("/api/applications", applicationRoutes);
 
-// Job management routes (create, read, update, delete jobs)
-const jobRoute = require("./routes/jobRoute");
-app.use("/api/job", jobRoute)
+const paymentRoutes = require("./routes/paymentRoute");
+app.use("/api/payments", paymentRoutes);
+
 
 // Catch-all 404 route
 app.use((req, res) => {
@@ -52,11 +80,3 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: "Something went wrong", error: err.message });
 });
-
-// Use PORT from .env with fallback
-const PORT = process.env.PORT || 4000;
-app.listen(PORT,() => {
-    console.log(`server is running on port ${PORT}`);
-});
-
-
