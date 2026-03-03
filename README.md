@@ -1,15 +1,15 @@
-# JobPortal - MernStack
+# JobPortal 
 
-A full-featured MERN stack Job Portal web application where job seekers can apply for jobs and employers can post and manage job listings.
+A full-featured  Job Portal web application where job seekers can apply for jobs and employers can post and manage job listings.
 
 ## Features
  
-👤 Authentication - 
+👤 Authentication 
   - User registration & login (JWT based)
   - Role-based access (Admin, Job Provider, Job Seeker)
   - Secure protected routes
 
-💼 Job Management -
+💼 Job Management 
   - Create job postings (Providers)
   - View all available jobs
   - View single job details
@@ -17,7 +17,7 @@ A full-featured MERN stack Job Portal web application where job seekers can appl
   - View posted jobs (Providers)
   - Delete / Manage jobs
 
-📊 Dashboards - 
+📊 Dashboards 
   - Job Seeker Dashboard
   - Job Provider Dashboard
   - Admin Controls
